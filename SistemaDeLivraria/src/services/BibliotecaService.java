@@ -14,18 +14,24 @@ public class BibliotecaService {
 	private List<Livro> livros = new ArrayList<>();
 	private List<Emprestimo> emprestimos = new ArrayList<>();
 
-	public String emprestarLivro(Livro livro) {
-		if (livro.getStatus() == Status.EMPRESTADO || livro.getStatus() == Status.INDISPONIVEL) {
-			return "O livro não está disponível para empréstimo";
+	public String emprestarLivro(String titulo) {
+		for (Livro livro : livros) {
+			if (livro.getTitulo().equalsIgnoreCase(titulo)) {
+
+				if (livro.getStatus() == Status.EMPRESTADO || livro.getStatus() == Status.INDISPONIVEL) {
+					return "O livro não está disponível para empréstimo";
+				}
+				LocalDate dataEmprestimo = LocalDate.now();
+				LocalDate dataDevolucao = dataEmprestimo.plusDays(7);
+				Emprestimo emprestimo = new Emprestimo(livro, dataEmprestimo, dataDevolucao);
+
+				emprestimos.add(emprestimo);
+				livro.setStatus(Status.EMPRESTADO);
+
+				return "O livro foi emprestado";
+			}
 		}
-		LocalDate dataEmprestimo = LocalDate.now();
-		LocalDate dataDevolucao = dataEmprestimo.plusDays(7);
-		Emprestimo emprestimo = new Emprestimo(livro, dataEmprestimo, dataDevolucao);
-
-		emprestimos.add(emprestimo);
-		livro.setStatus(Status.EMPRESTADO);
-
-		return "O livro foi emprestado";
+		return "O livro " + titulo + "não foi encontrado";
 	}
 
 	public void adicionarLivro(int id, String titulo, String autor) {
