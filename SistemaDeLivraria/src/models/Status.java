@@ -2,7 +2,7 @@ package models;
 
 public enum Status {
 	DISPONIVEL ("Disponivel"),
-	eMPRESTADO ("Emprestado"),
+	EMPRESTADO ("Emprestado"),
 	INDISPONIVEL("Indisponivel");
 	
 	private final String status;
